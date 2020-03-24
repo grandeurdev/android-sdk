@@ -1,0 +1,2 @@
+rootProject.name='grandeurcloud-android-sdk'
+include ':app'
