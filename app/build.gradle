@@ -1,11 +1,17 @@
-apply plugin: 'com.android.application'
+//.application is changed into .library
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.example.grandeurcloud_android_sdk"
+//        Application Id need to be removed from
+//        here in order to convert the project
+//        into a library.
+
+//        applicationId "com.example.grandeurcloud_android_sdk"
+
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
