@@ -1,17 +1,16 @@
-//.application is changed into .library
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     defaultConfig {
-//        Application Id need to be removed from
-//        here in order to convert the project
-//        into a library.
-
-//        applicationId "com.example.grandeurcloud_android_sdk"
-
+        applicationId "com.example.grandeurcloud_android_sdk"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
@@ -31,6 +30,15 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+
+    // gson convertor factory
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+
+    // For cookies handling
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
