@@ -37,8 +37,12 @@ dependencies {
     // gson convertor factory
     implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
 
-    // For cookies handling
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
+    // OKHttp interceptors
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+
+    // AndroidX Preference Manager
+    implementation "androidx.preference:preference:1.1.0"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

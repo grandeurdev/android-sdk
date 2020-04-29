@@ -5,6 +5,7 @@
 // in every class.
 package com.example.grandeurcloud_android_sdk.handlers;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -28,7 +29,7 @@ public class Post {
 
     // Default function for sending requests
     // to the server.
-    public Call<JsonObject> send(String path, JsonObject data){
+    public Call<JsonObject> send(String path, JsonObject data, Context context){
 
         Log.d("Data", data.toString());
 
@@ -42,7 +43,7 @@ public class Post {
 
         // Initialize Post Service
         Call<JsonObject> postService = PostService.
-                                       getService(this.config.get("url").getAsString()).
+                                       getService(this.config.get("url").getAsString(),context).
                                        send(fullPath,headers,data);
         return postService;
     }

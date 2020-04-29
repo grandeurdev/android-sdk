@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         Post post = new Post(config);
 
         // Create a request
-        Call<JsonObject> login =  post.send("/auth/loginwithemail", data);
-        Call<JsonObject> changePassword = post.send("/auth/changePassword",newPassword);
+        Call<JsonObject> login =  post.send("/auth/loginwithemail", data, this);
+        Call<JsonObject> changePassword = post.send("/auth/changePassword",newPassword, this);
 
         Button loginBtn =  (Button) findViewById(R.id.login);
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 test(login);
             }
         });
+
 
         Button changePassword1 = (Button) findViewById(R.id.changePassword);
         changePassword1.setOnClickListener(new View.OnClickListener() {
@@ -72,25 +73,23 @@ public class MainActivity extends AppCompatActivity {
     }
     public void test(Call<JsonObject> temp) {
 
-        temp.enqueue(new Callback<JsonObject>() {
+        temp.clone().enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                 Log.d("Response : ", response.toString());
                 Log.d("Headers : ", response.headers().toString());
-
-                JsonObject jsonBody = new JsonParser().
-                                parse(response.
-                                        body().
-                                        toString()
-                                ).
-                                getAsJsonObject();
-
-
-                Log.d("Code : ", jsonBody.get("code").getAsString());
-                Log.d("Message : ", jsonBody.get("message").getAsString());
-
-
+                JsonObject jsonBody;
+                if(response.body()!=null){
+                     jsonBody = new JsonParser().
+                            parse(response.
+                                    body().
+                                    toString()
+                            ).
+                            getAsJsonObject();
+                    Log.d("Code : ", jsonBody.get("code").getAsString());
+                    Log.d("Message : ", jsonBody.get("message").getAsString());
+                }
 //                Log.d("Cookie",response.raw().headers().get("Set-Cookie").toString());
                 List<String> a = response.raw().headers().values("Set-Cookie");
                 Log.d("List of Cookies", a.toString());
