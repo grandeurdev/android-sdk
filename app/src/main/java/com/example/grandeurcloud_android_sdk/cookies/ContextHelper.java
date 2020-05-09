@@ -1,6 +1,5 @@
 package com.example.grandeurcloud_android_sdk.cookies;
 
-import android.content.Context;
 import android.app.Application;
 import android.content.Context;
 

@@ -1,13 +1,9 @@
 package com.example.grandeurcloud_android_sdk.cookies;
-
-// Original written by tsuharesu
-// Adapted to create a "drop it in and watch it work" approach by Nikhil Jha.
-// Just add your package statement and drop it in the folder with all your other classes.
-
 import android.content.Context;
-import androidx.preference.PreferenceManager;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.preference.PreferenceManager;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -21,8 +17,7 @@ import okhttp3.Response;
  */
 public class AddCookiesInterceptor implements Interceptor {
     public static final String PREF_COOKIES = "PREF_COOKIES";
-    // We're storing our stuff in a database made just for cookies called PREF_COOKIES.
-    // I reccomend you do this, and don't change this default value.
+
     private Context context;
 
     public AddCookiesInterceptor(Context context) {
@@ -33,18 +28,19 @@ public class AddCookiesInterceptor implements Interceptor {
     public Response intercept(Interceptor.Chain chain) throws IOException {
         Request.Builder builder = chain.request().newBuilder();
 
+        // Clear all the cookies if url contains LOGOUT endpoint
+        String url = chain.request().url().toString();
+//        if(url.contains("logout")==true){
+//            SharedPreferences.Editor memes = PreferenceManager.getDefaultSharedPreferences(context).edit();
+//            memes.putStringSet("PREF_COOKIES", null).apply();
+//            memes.commit();
+//        }
+        Log.d("URL", url);
+
         HashSet<String> preferences = (HashSet<String>) PreferenceManager.
                 getDefaultSharedPreferences(context).
                 getStringSet(PREF_COOKIES, new HashSet<String>());
-        // Use the following if you need everything in one line.
-        // Some APIs die if you do it differently.
-        /*String cookiestring = "";
-        for (String cookie : preferences) {
-            String[] parser = cookie.split(";");
-            cookiestring = cookiestring + parser[0] + "; ";
-        }
-        builder.addHeader("Cookie", cookiestring);
-        */
+
 
         for (String cookie : preferences) {
             builder.addHeader("Cookie", cookie);

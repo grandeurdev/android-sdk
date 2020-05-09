@@ -1,106 +1,269 @@
 package com.example.grandeurcloud_android_sdk;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.grandeurcloud_android_sdk.handlers.Post;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.grandeurcloud_android_sdk.apolloHandlers.Auth;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.util.List;
-
-import okhttp3.Cookie;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Token
+    String token = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        CookieManager cookieManager = new java.net.CookieManager();
-//        CookieHandler.setDefault(cookieManager);
+        // Context
+        Context context = this;
 
-        // Create a default config
-        JsonObject config = new JsonObject();
-        config.addProperty("url","https://api.grandeur.tech");
-        config.addProperty("apiKey","ck412ssij0007xr239uos8jfk");
+        // Create a new Apollo project
+        Apollo apolloProject = new Apollo(this);
 
-        // Dummy login data
-        JsonObject data = new JsonObject();
-        data.addProperty("email","demo@demo.com");
-        data.addProperty("password","demo:80");
+        // Initialize Apollo project with the ApiKey
+        apolloProject.init("ck412ssij0007xr239uos8jfk");
 
-        // New password
-        JsonObject newPassword = new JsonObject();
-        newPassword.addProperty("password","demo:69");
+        // Get Auth functions
+        Auth auth = apolloProject.auth;
 
-        // Initialize Post object
-        Post post = new Post(config);
-
-        // Create a request
-        Call<JsonObject> login =  post.send("/auth/loginwithemail", data, this);
-        Call<JsonObject> changePassword = post.send("/auth/changePassword",newPassword, this);
-
+        // Login button
         Button loginBtn =  (Button) findViewById(R.id.login);
+
+        // Register button
+        Button registerBtn = (Button) findViewById(R.id.register);
+
+        // Confirm registration button
+        Button confirmRegBtn = (Button) findViewById(R.id.confirmReg);
+
+        // Logout button
+        Button logoutBtn = (Button) findViewById(R.id.logout);
+
+        // EditText for email
+        EditText email = (EditText) findViewById(R.id.email);
+
+        // EditText for password
+        EditText password = (EditText) findViewById(R.id.password);
+
+        // EditText for Display Name
+        EditText displayName = (EditText) findViewById(R.id.displayName);
+
+        // EditText for Phone
+        EditText phone = (EditText) findViewById(R.id.phone);
+
+        // EditText for code
+        EditText code = (EditText) findViewById(R.id.code);
+
+
+
+        // Login On Click listener
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                test(login);
+
+                // Get email from user
+                String userEmail = email.getText().toString();
+
+                // GEt password from user
+                String userPassword = password.getText().toString();
+
+                // Get login module from Grandeur Auth
+                Call<JsonObject> login = auth.login(userEmail, userPassword);
+
+                // Call login module with credentials
+                login.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        JsonObject jsonBody;
+                        if(response.body()!=null) {
+                            jsonBody = new JsonParser().
+                                    parse(response.
+                                            body().
+                                            toString()
+                                    ).
+                                    getAsJsonObject();
+                            Log.d("Response : ", jsonBody.toString());
+                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
             }
         });
 
-
-        Button changePassword1 = (Button) findViewById(R.id.changePassword);
-        changePassword1.setOnClickListener(new View.OnClickListener() {
+        // Register on click listener
+        registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                test(changePassword);
+                // Get email from user
+                String userEmail = email.getText().toString();
+
+                // GEt password from user
+                String userPassword = password.getText().toString();
+
+                // Get display name from user
+                String userDisplayName = displayName.getText().toString();
+
+                // Get phone no from user
+                String userPhone = phone.getText().toString();
+
+                // Get register module from Grandeur Auth
+                Call<JsonObject> register = auth.register(userEmail,userPassword,userDisplayName,userPhone);
+
+                // Call Register module with credentials
+                register.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        JsonObject jsonBody;
+                        if(response.body()!=null) {
+                            jsonBody = new JsonParser().
+                                    parse(response.
+                                            body().
+                                            toString()
+                                    ).
+                                    getAsJsonObject();
+                            token = jsonBody.get("token").getAsString();
+                            Log.d("Response : ", jsonBody.toString());
+                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
+                                    .show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
+
+            }
+        });
+
+        // Confirm Register on click listener
+        confirmRegBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get code from the user
+                String userCode = code.getText().toString();
+
+                // Get register module from Grandeur Auth
+                Call<JsonObject> ConfirmReg = auth.register(token,userCode);
+
+                // Call Register module with credentials
+                ConfirmReg.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        JsonObject jsonBody;
+                        if(response.body()!=null) {
+                            jsonBody = new JsonParser().
+                                    parse(response.
+                                            body().
+                                            toString()
+                                    ).
+                                    getAsJsonObject();
+                            Log.d("Response : ", jsonBody.toString());
+                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
+
+            }
+        });
+
+        // Logout on click listener
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get logout module from Grandeur Auth
+                Call<JsonObject> logout = auth.logout();
+
+                // Call logout module
+                logout.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        JsonObject jsonBody;
+                        if(response.body()!=null) {
+                            jsonBody = new JsonParser().
+                                    parse(response.
+                                            body().
+                                            toString()
+                                    ).
+                                    getAsJsonObject();
+                            Log.d("Response : ", jsonBody.toString());
+                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
             }
         });
 
 
-    }
-    public void test(Call<JsonObject> temp) {
-
-        temp.clone().enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                Log.d("Response : ", response.toString());
-                Log.d("Headers : ", response.headers().toString());
-                JsonObject jsonBody;
-                if(response.body()!=null){
-                     jsonBody = new JsonParser().
-                            parse(response.
-                                    body().
-                                    toString()
-                            ).
-                            getAsJsonObject();
-                    Log.d("Code : ", jsonBody.get("code").getAsString());
-                    Log.d("Message : ", jsonBody.get("message").getAsString());
-                }
-//                Log.d("Cookie",response.raw().headers().get("Set-Cookie").toString());
-                List<String> a = response.raw().headers().values("Set-Cookie");
-                Log.d("List of Cookies", a.toString());
-            }
 
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d("Error", t.toString());
 
-            }
-        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

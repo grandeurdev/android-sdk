@@ -1,26 +1,16 @@
 package com.example.grandeurcloud_android_sdk.handlers;
 
-import android.app.Application;
 import android.content.Context;
-
 import com.example.grandeurcloud_android_sdk.cookies.AddCookiesInterceptor;
-import com.example.grandeurcloud_android_sdk.cookies.ContextHelper;
 import com.example.grandeurcloud_android_sdk.cookies.ReceivedCookiesInterceptor;
 import com.google.gson.JsonObject;
 
-import java.io.IOException;
-import java.net.CookieManager;
-import java.util.Map;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
-import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
@@ -83,9 +73,6 @@ public class PostService {
         Call<JsonObject> send(
                 // Endpoint along with ApiKey
                 @Url String fullPath,
-
-                // All the headers i.e cookies
-                @HeaderMap Map<String,String> headers,
 
                 // Data to be send to the cloud
                 @Body JsonObject data

@@ -1,11 +1,10 @@
 package com.example.grandeurcloud_android_sdk.cookies;
 
-// Original written by tsuharesu
-// Adapted to create a "drop it in and watch it work" approach by Nikhil Jha.
-// Just add your package statement and drop it in the folder with all your other classes.
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
 import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
@@ -22,6 +21,12 @@ public class ReceivedCookiesInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response originalResponse = chain.proceed(chain.request());
+
+       Log.d("Original Response : ", originalResponse.body().string());
+//        Log.d("Response Code : ", String.valueOf(originalResponse.code()));
+//        if (originalResponse.code()==422){
+//            originalResponse.body().string()
+//        }
 
         if (!originalResponse.headers("Set-Cookie").isEmpty()) {
             HashSet<String> cookies = (HashSet<String>) PreferenceManager.
