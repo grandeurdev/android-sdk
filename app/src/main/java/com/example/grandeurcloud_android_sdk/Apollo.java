@@ -1,7 +1,5 @@
-// This is the main
-// Apollo class and it is
-// used to initialize
-// your project.
+// This is the main Apollo class and it is
+// used to initialize your project.
 
 package com.example.grandeurcloud_android_sdk;
 

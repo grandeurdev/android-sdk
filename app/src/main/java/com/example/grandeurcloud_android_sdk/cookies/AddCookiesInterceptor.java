@@ -1,9 +1,10 @@
 package com.example.grandeurcloud_android_sdk.cookies;
+
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.preference.PreferenceManager;
+
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -28,24 +29,23 @@ public class AddCookiesInterceptor implements Interceptor {
     public Response intercept(Interceptor.Chain chain) throws IOException {
         Request.Builder builder = chain.request().newBuilder();
 
-        // Clear all the cookies if url contains LOGOUT endpoint
-        String url = chain.request().url().toString();
-//        if(url.contains("logout")==true){
-//            SharedPreferences.Editor memes = PreferenceManager.getDefaultSharedPreferences(context).edit();
-//            memes.putStringSet("PREF_COOKIES", null).apply();
-//            memes.commit();
-//        }
-        Log.d("URL", url);
+//        // Clear all the cookies if url contains LOGOUT endpoint
+      String url = chain.request().url().toString();
+      String body = chain.request().body().toString();
+
+//      Log.i("BODY", body);
+      //Log.i("URL", url);
 
         HashSet<String> preferences = (HashSet<String>) PreferenceManager.
                 getDefaultSharedPreferences(context).
                 getStringSet(PREF_COOKIES, new HashSet<String>());
 
-
+       // Log.i("Add Cookie", preferences.toString());
+       // builder.addHeader("Cookie", preferences.toString());
         for (String cookie : preferences) {
-            builder.addHeader("Cookie", cookie);
-        }
+           builder.addHeader("Cookie", cookie);
 
+        }
         return chain.proceed(builder.build());
     }
 }

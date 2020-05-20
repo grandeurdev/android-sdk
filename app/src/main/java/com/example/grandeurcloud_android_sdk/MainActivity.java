@@ -49,6 +49,18 @@ public class MainActivity extends AppCompatActivity {
         // Confirm registration button
         Button confirmRegBtn = (Button) findViewById(R.id.confirmReg);
 
+        // Change password button
+        Button changePassBtn = (Button) findViewById(R.id.changePass);
+
+        // Confirm change password button
+        Button confirmChangePassBtn = (Button) findViewById(R.id.confirmChange);
+
+        // Forget password button
+        Button forgetPassBtn = (Button) findViewById(R.id.forgetPass);
+
+        // Confirm Forget password button
+        Button confirmForgetPassBtn = (Button) findViewById(R.id.confirmForget);
+
         // Logout button
         Button logoutBtn = (Button) findViewById(R.id.logout);
 
@@ -167,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 // Get register module from Grandeur Auth
                 Call<JsonObject> ConfirmReg = auth.register(token,userCode);
 
+                token = null;
+
                 // Call Register module with credentials
                 ConfirmReg.enqueue(new Callback<JsonObject>() {
                     @Override
@@ -193,6 +207,275 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        // Change password on click listener
+        changePassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Get new password from user
+                String userPassword = password.getText().toString();
+
+                // Get change password moudle from Auth
+                Call<JsonObject> changePassword = auth.changePassword(userPassword);
+
+                // Call change password
+                changePassword.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                        JsonObject jsonBody;
+                        if(response.body()!=null) {
+                            jsonBody = new JsonParser().
+                                    parse(response.
+                                            body().
+                                            toString()
+                                    ).
+                                    getAsJsonObject();
+                            token = jsonBody.get("token").getAsString();
+                            Log.d("Response : ", jsonBody.toString());
+                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
+                                    .show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
+        // Confirm change password on click listener
+        confirmChangePassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Get code from the user
+                String userCode = code.getText().toString();
+
+                // Get change password moudle from Auth
+                Call<JsonObject> changePassword = auth.changePassword(token,userCode);
+
+                token = null;
+
+                // Call change password
+                changePassword.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                        JsonObject jsonBody;
+                        if(response.body()!=null) {
+                            jsonBody = new JsonParser().
+                                    parse(response.
+                                            body().
+                                            toString()
+                                    ).
+                                    getAsJsonObject();
+                            Log.d("Response : ", jsonBody.toString());
+                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
+                                    .show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
+        // Forget password on click listener
+        forgetPassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Get email from user
+                String userEmail = email.getText().toString();
+
+                // Get forget password moudle from Auth
+                Call<JsonObject> forgetPassword = auth.forgotPassword(userEmail);
+
+                // Call forget password
+                forgetPassword.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                        JsonObject jsonBody;
+                        if(response.body()!=null) {
+                            jsonBody = new JsonParser().
+                                    parse(response.
+                                            body().
+                                            toString()
+                                    ).
+                                    getAsJsonObject();
+                            token = jsonBody.get("token").getAsString();
+                            Log.d("Response : ", jsonBody.toString());
+                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
+                                    .show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
+
+            }
+        });
+
+        // Confirm forget password on click listener
+        confirmForgetPassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Get code from the user
+                String userCode = code.getText().toString();
+
+                // Get new password from user
+                String userPassword = password.getText().toString();
+
+                // Get change password module from Auth
+                Call<JsonObject> forgetPassword = auth.forgotPassword(token,userCode,userPassword);
+
+                token = null;
+
+                // Call change password
+                forgetPassword.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                        JsonObject jsonBody;
+                        if(response.body()!=null) {
+                            jsonBody = new JsonParser().
+                                    parse(response.
+                                            body().
+                                            toString()
+                                    ).
+                                    getAsJsonObject();
+                            Log.d("Response : ", jsonBody.toString());
+                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
+                                    .show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Logout on click listener
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -227,43 +510,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // Logout listener ends
     }
 }

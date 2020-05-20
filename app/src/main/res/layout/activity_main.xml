@@ -48,7 +48,7 @@
         android:layout_height="52dp"
         android:textSize="30dp"
         android:layout_below="@+id/phone"
-        android:hint="Your phone code here" />
+        android:hint="Your code here" />
 
 <!--    Login button-->
     <Button
@@ -85,5 +85,38 @@
         android:layout_toRightOf="@+id/confirmReg"
         android:text="logout" />
 
+    <!--    Change Password button-->
+    <Button
+        android:id="@+id/changePass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login"
+        android:text="Change pass" />
+
+    <!--    Confirm Password button-->
+    <Button
+        android:id="@+id/confirmChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login"
+        android:layout_toRightOf="@+id/changePass"
+        android:text="Confirm pass" />
+
+    <!--  Forget Password button-->
+    <Button
+        android:id="@+id/forgetPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/changePass"
+        android:text="Forget pass" />
+
+    <!-- Confirm Forget Password button-->
+    <Button
+        android:id="@+id/confirmForget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login"
+        android:layout_toRightOf="@+id/confirmChange"
+        android:text="Confirm Forget" />
 
 </RelativeLayout>

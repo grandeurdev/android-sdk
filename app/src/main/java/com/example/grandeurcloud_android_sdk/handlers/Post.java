@@ -10,14 +10,13 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 // Class definition
 public class Post {
+
+    private static final String PREF_COOKIES ="PREF_COOKIES" ;
 
     // Configuration
     JsonObject config = null;
@@ -34,8 +33,9 @@ public class Post {
     public Call<JsonObject> send(String path, JsonObject data, Context context) {
 
         jsonBody = null;
+
         // Data object
-        Log.d("Data", data.toString());
+        Log.i("Data", data.toString());
 
         // Create full path with ApiKey
         final String fullPath = path + "?apiKey=" + this.config.get("apiKey").getAsString();
