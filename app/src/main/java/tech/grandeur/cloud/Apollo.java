@@ -1,13 +1,18 @@
 // This is the main Apollo class and it is
 // used to initialize your project.
 
-package com.example.grandeurcloud_android_sdk;
+package tech.grandeur.cloud;
 
+// Android defaults
 import android.content.Context;
 
-import com.example.grandeurcloud_android_sdk.apolloHandlers.Auth;
-import com.example.grandeurcloud_android_sdk.handlers.Handlers;
-import com.example.grandeurcloud_android_sdk.handlers.Post;
+// Grandeur
+import tech.grandeur.cloud.apolloHandlers.Auth;
+import tech.grandeur.cloud.apolloHandlers.Storage;
+import tech.grandeur.cloud.handlers.Handlers;
+import tech.grandeur.cloud.handlers.Post.Post;
+
+// Google Gson for Json
 import com.google.gson.JsonObject;
 
 public class Apollo {
@@ -24,6 +29,9 @@ public class Apollo {
     // Creates an Auth object
     Auth auth = null;
 
+    // Creates a Storage object
+    Storage storage = null;
+
     // Context
     private Context context = null;
 
@@ -38,17 +46,23 @@ public class Apollo {
 
     // Function that initializes
     // the Apollo object
-    public void init(String apiKey){
+    public void init(String apiKey,String accessKey, String accessToken){
+        // set configuration
         this.config.addProperty("apiKey",apiKey);
+        this.config.addProperty("accessKey",accessKey);
+        this.config.addProperty("accessToken",accessToken);
 
         // Post Handler
-        this.post = new Post(this.config);
+        this.post = new Post(this.config,this.context);
 
         // Handlers
         this.handlers = new Handlers(this.post);
 
         // Initialize default auth
         this.auth = new Auth(handlers,this.context);
+
+        // Initialize default storage
+        this.storage = new Storage(handlers,this.context);
 
     }
 }

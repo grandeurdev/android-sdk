@@ -1,4 +1,4 @@
-package com.example.grandeurcloud_android_sdk;
+package tech.grandeur.cloud;
 
 import org.junit.Test;
 

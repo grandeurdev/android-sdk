@@ -1,19 +1,31 @@
-package com.example.grandeurcloud_android_sdk.handlers;
+package tech.grandeur.cloud.handlers.Post;
 
+// Android defaults
 import android.content.Context;
+import java.util.Map;
 
-import com.example.grandeurcloud_android_sdk.cookies.AddCookiesInterceptor;
-import com.example.grandeurcloud_android_sdk.cookies.ReceivedCookiesInterceptor;
+// Grandeur
+import tech.grandeur.cloud.cookies.AddCookiesInterceptor;
+import tech.grandeur.cloud.cookies.ReceivedCookiesInterceptor;
+
+// Google Gson for Json
 import com.google.gson.JsonObject;
 
+// OkHttp
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+
+// Retrofit
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
-import retrofit2.http.Headers;
+import retrofit2.http.HeaderMap;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Url;
 
 public class PostService {
@@ -60,13 +72,6 @@ public class PostService {
 
     public interface Service{
 
-        // Define default headers
-        @Headers(
-                {
-                        "Content-Type: application/json;charset=UTF-8",
-                        "Origin: Android"
-        })
-
         // Send a POST request to Cloud
         @POST
 
@@ -76,7 +81,30 @@ public class PostService {
                 @Url String fullPath,
 
                 // Data to be send to the cloud
-                @Body JsonObject data
+                @Body JsonObject data,
+
+                // Headers
+                @HeaderMap Map<String, String> headers
         );
+
+        @Multipart
+
+        // Send a POST request to Cloud
+        @POST
+
+            // Send function definition
+        Call<JsonObject> upload(
+                // Endpoint along with ApiKey
+                @Url String fullPath,
+
+                // Multipart body
+                @Part MultipartBody.Part file,
+
+                @Part("filename") RequestBody name,
+
+                // Headers
+                @HeaderMap Map<String, String> headers
+        );
+
     }
 }

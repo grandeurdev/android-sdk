@@ -1,4 +1,4 @@
-package com.example.grandeurcloud_android_sdk;
+package tech.grandeur.cloud;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.example.grandeurcloud_android_sdk", appContext.getPackageName());
+        assertEquals("tech.grandeur.cloud", appContext.getPackageName());
     }
 }

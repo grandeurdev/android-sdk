@@ -6,24 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<!--    EditText for email-->
+    <!--    EditText for email-->
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="52dp"
+        android:text="demo@demo.com"
         android:textSize="30dp"
         android:hint="Your email here" />
 
-<!--    EditText for password-->
+    <!--    EditText for password-->
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="52dp"
+        android:text="demo:80"
         android:textSize="30dp"
         android:layout_below="@+id/email"
         android:hint="Your password here" />
 
-<!--    EditText for display name-->
+    <!--    EditText for display name-->
     <EditText
         android:id="@+id/displayName"
         android:layout_width="match_parent"
@@ -32,7 +34,7 @@
         android:layout_below="@+id/password"
         android:hint="Your Display name here" />
 
-<!--    EditText for phone no.-->
+    <!--    EditText for phone no.-->
     <EditText
         android:id="@+id/phone"
         android:layout_width="match_parent"
@@ -41,7 +43,7 @@
         android:layout_below="@+id/displayName"
         android:hint="Your phone here" />
 
-<!--    EditText for phone code-->
+    <!--    EditText for phone code-->
     <EditText
         android:id="@+id/code"
         android:layout_width="match_parent"
@@ -50,7 +52,7 @@
         android:layout_below="@+id/phone"
         android:hint="Your code here" />
 
-<!--    Login button-->
+    <!--    Login button-->
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"
@@ -58,7 +60,7 @@
         android:layout_below="@+id/code"
         android:text="Login" />
 
-<!--    Register button-->
+    <!--    Register button-->
     <Button
         android:id="@+id/register"
         android:layout_width="wrap_content"
@@ -118,5 +120,22 @@
         android:layout_below="@+id/login"
         android:layout_toRightOf="@+id/confirmChange"
         android:text="Confirm Forget" />
+
+    <!-- Pick image button-->
+    <Button
+        android:id="@+id/pickImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/forgetPass"
+        android:text="Pick Image" />
+
+    <!-- Upload image button-->
+    <Button
+        android:id="@+id/uploadImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/pickImage"
+        android:layout_below="@+id/forgetPass"
+        android:text="Upload Image" />
 
 </RelativeLayout>
