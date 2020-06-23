@@ -52,12 +52,21 @@
         android:layout_below="@+id/phone"
         android:hint="Your code here" />
 
+    <!--    EditText for image code-->
+    <EditText
+        android:id="@+id/imageName"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:textSize="30dp"
+        android:layout_below="@+id/code"
+        android:hint="Your image name here" />
+
     <!--    Login button-->
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/code"
+        android:layout_below="@+id/imageName"
         android:text="Login" />
 
     <!--    Register button-->
@@ -65,7 +74,7 @@
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/code"
+        android:layout_below="@+id/imageName"
         android:layout_toRightOf="@+id/login"
         android:text="Register" />
 
@@ -74,7 +83,7 @@
         android:id="@+id/confirmReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/code"
+        android:layout_below="@+id/imageName"
         android:layout_toRightOf="@+id/register"
         android:text="Confirm Reg" />
 
@@ -83,7 +92,7 @@
         android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/code"
+        android:layout_below="@+id/imageName"
         android:layout_toRightOf="@+id/confirmReg"
         android:text="logout" />
 
@@ -127,7 +136,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/forgetPass"
-        android:text="Pick Image" />
+        android:text="Pick" />
 
     <!-- Upload image button-->
     <Button
@@ -136,6 +145,15 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/pickImage"
         android:layout_below="@+id/forgetPass"
-        android:text="Upload Image" />
+        android:text="Upload" />
+
+    <!-- Fetch image button-->
+    <Button
+        android:id="@+id/fetchImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/uploadImage"
+        android:layout_below="@+id/forgetPass"
+        android:text="Fetch" />
 
 </RelativeLayout>

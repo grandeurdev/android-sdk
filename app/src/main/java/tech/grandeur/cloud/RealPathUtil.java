@@ -1,11 +1,8 @@
-package tech.grandeur.cloud.handlers;
+package tech.grandeur.cloud;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -13,7 +10,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
-import androidx.core.app.ActivityCompat;
 import androidx.loader.content.CursorLoader;
 
 public class RealPathUtil {

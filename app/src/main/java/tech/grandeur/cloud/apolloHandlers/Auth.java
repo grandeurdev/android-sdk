@@ -53,7 +53,7 @@ public class Auth {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Call<JsonObject> register(String email, String password, String displayName, String phone) throws Exception {
 
-        // Json Object to send to the cloud
+        // Json Object to send to the server
         JsonObject data = new JsonObject();
         data.addProperty("email", email);
         data.addProperty("password", password);
@@ -73,7 +73,7 @@ public class Auth {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Call<JsonObject> register(String token, String verificationCode) throws Exception {
 
-        // Json Object to send to the cloud
+        // Json Object to send to the server
         JsonObject data = new JsonObject();
         data.addProperty("token", token);
         data.addProperty("verificationCode", verificationCode);
@@ -87,14 +87,13 @@ public class Auth {
     // submit the request
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Call<JsonObject> forgotPassword(String email) throws Exception {
-        // Json Object to send to the cloud
+
+        // Json Object to send to the server
         JsonObject data = new JsonObject();
         data.addProperty("email", email);
 
         // Sends data to the server and returns a response callback
-
         return this.post.send("/auth/forgotPassword", data, null, this.context).clone();
-
     }
 
     // Confirmation function will get the token from the user received
@@ -104,16 +103,14 @@ public class Auth {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Call<JsonObject> forgotPassword(String token, String verificationCode, String password) throws Exception {
 
-        // Json Object to send to the cloud
+        // Json Object to send to the server
         JsonObject data = new JsonObject();
         data.addProperty("verificationCode", verificationCode);
         data.addProperty("token", token);
         data.addProperty("password", password);
 
         // Sends data to the server and returns a response callback
-
         return this.post.send("/auth/forgotPassword", data, null, this.context).clone();
-
     }
 
     // This function sends "changePassword" request with provided data to the server
@@ -121,14 +118,12 @@ public class Auth {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Call<JsonObject> changePassword(String password) throws Exception {
 
-        // Json Object to send to the cloud
+        // Json Object to send to the server
         JsonObject data = new JsonObject();
         data.addProperty("password", password);
 
         // Sends data to the server and returns a response callback
-
         return this.post.send("/auth/changePassword", data, null, this.context).clone();
-
     }
 
     // Confirmation function will get the token from the user received
@@ -138,27 +133,20 @@ public class Auth {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Call<JsonObject> changePassword(String token, String verificationCode) throws Exception {
 
-        // Json Object to send to the cloud
+        // Json Object to send to the server
         JsonObject data = new JsonObject();
         data.addProperty("token", token);
         data.addProperty("verificationCode", verificationCode);
 
         // Sends data to the server and returns a response callback
-
         return this.post.send("/auth/changePassword", data, null, this.context).clone();
-
     }
-
 
     // This function sends "logout the user" request to the server
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Call<JsonObject> logout() throws Exception {
 
         // Sends logout request to the server and returns a response callback
-
         return this.post.send("/auth/logout", new JsonObject(), null, this.context);
-
     }
-
-
 }

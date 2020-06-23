@@ -1,8 +1,11 @@
 package tech.grandeur.cloud;
 
 // Android defaults
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 // Grandeur
 import tech.grandeur.cloud.apolloHandlers.Auth;
@@ -23,6 +27,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 // Android Crypto
+import java.io.File;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -33,9 +38,11 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    // File Select Id
     private static final int FILE_SELECT = 1;
     //Token
     String token = null;
+    // Uri
     Uri uri = null;
 
     @Override
@@ -91,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         // Upload image button
         Button uploadImgBtn = (Button) findViewById(R.id.uploadImage);
 
+        // Fetch image button
+        Button fetchImageBtn = (Button) findViewById(R.id.fetchImage);
+
         // EditText for email
         final EditText email = (EditText) findViewById(R.id.email);
 
@@ -106,7 +116,8 @@ public class MainActivity extends AppCompatActivity {
         // EditText for code
         final EditText code = (EditText) findViewById(R.id.code);
 
-
+        // EditText for Image Name
+        final EditText imageName = (EditText) findViewById(R.id.imageName);
 
         // Login On Click listener
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -503,6 +514,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Logout listener ends
+
+        // Pick Image
         pickImgBtn.setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -513,12 +526,33 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select picture"), FILE_SELECT );
             }
         });
+
+        // Upload Image
         uploadImgBtn.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
+                // Absolute Path
+                String absolutePath = null;
+
+                if(checkPermissionForReadExternalStorage(getApplicationContext())==true){
+                    absolutePath = RealPathUtil.getRealPath(getApplicationContext(),uri);
+                } else {
+                    try {
+                        requestPermissionForReadExtertalStorage(getApplicationContext());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // Create a new File with absolute path
+                File file = new File(absolutePath);
+
+                // Image name
+                String image = imageName.getText().toString();
+
                 try {
-                    storage.uploadFile(uri,"Demo").enqueue(new Callback<JsonObject>() {
+                    storage.uploadFile(file,image).enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             JsonObject jsonBody;
@@ -531,6 +565,31 @@ public class MainActivity extends AppCompatActivity {
                                         getAsJsonObject();
                                 Log.d("Response : ", jsonBody.toString());
                             }
+                        }
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // Fetch File
+        fetchImageBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+
+                // Image name
+                String image = imageName.getText().toString();
+
+                try {
+                    storage.getFileUrl(image).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                         }
 
@@ -542,9 +601,14 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
             }
         });
+
+
     }
+    // On create ends
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -555,9 +619,26 @@ public class MainActivity extends AppCompatActivity {
             {
                 uri = data.getData();
 
-
                 Log.d("Uri", "onActivityResult: "+uri.toString());
             }
         }
     }
+    public boolean checkPermissionForReadExternalStorage(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int result = context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            return result == PackageManager.PERMISSION_GRANTED;
+        }
+        return false;
+    }
+    public void requestPermissionForReadExtertalStorage(Context context) throws Exception {
+        try {
+            ActivityCompat.requestPermissions((Activity) context,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    777);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }
+
