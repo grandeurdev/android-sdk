@@ -142,6 +142,22 @@ public class Auth {
         return this.post.send("/auth/changePassword", data, null, this.context).clone();
     }
 
+    // This function sends PING request to the server
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public Call<JsonObject> ping() throws Exception {
+
+        // Sends logout request to the server and returns a response callback
+        return this.post.send("/auth/ping", new JsonObject(), null, this.context);
+    }
+
+    // This function sends "isAuthenticated" request to the server
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public Call<JsonObject> isAuthenticated() throws Exception {
+
+        // Sends logout request to the server and returns a response callback
+        return this.post.send("/auth/protectedpage", new JsonObject(), null, this.context);
+    }
+
     // This function sends "logout the user" request to the server
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Call<JsonObject> logout() throws Exception {
