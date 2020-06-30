@@ -3,6 +3,7 @@ package tech.grandeur.cloud.handlers.Post;
 // Android defaults
 import android.content.Context;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 // Grandeur
 import tech.grandeur.cloud.cookies.AddCookiesInterceptor;
@@ -18,7 +19,6 @@ import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 // Retrofit
-import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
@@ -76,7 +76,7 @@ public class PostService {
         @POST
 
         // Send function definition
-        Call<JsonObject> send(
+        CompletableFuture<JsonObject> send(
                 // Endpoint along with ApiKey
                 @Url String fullPath,
 
@@ -93,7 +93,7 @@ public class PostService {
         @POST
 
             // Send function definition
-        Call<JsonObject> upload(
+        CompletableFuture<JsonObject> upload(
                 // Endpoint along with ApiKey
                 @Url String fullPath,
 

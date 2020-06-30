@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,24 +16,18 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import java.io.File;
+
+//Google Gson for Json
+import com.google.gson.JsonObject;
 
 // Grandeur
 import tech.grandeur.cloud.apolloHandlers.Auth;
 import tech.grandeur.cloud.apolloHandlers.Storage;
 
+// Grandeur
 // Google Gson for Json
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-// Android Crypto
-import java.io.File;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-// Retrofit
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -101,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
         // Fetch image button
         Button fetchImageBtn = (Button) findViewById(R.id.fetchImage);
 
+        // Test login 1
+        Button login1 = (Button) findViewById(R.id.login1);
+
         // EditText for email
         final EditText email = (EditText) findViewById(R.id.email);
 
@@ -131,45 +127,20 @@ public class MainActivity extends AppCompatActivity {
                 // GEt password from user
                 String userPassword = password.getText().toString();
 
-//                 Get login module from Grandeur Auth
-                Call<JsonObject> login = null;
                 try {
-                    login = auth.login(userEmail, userPassword);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    // Create and call login module
+                    JsonObject res = auth.login(userEmail,userPassword).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-//                 Call login module with credentials
-                login.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        JsonObject jsonBody;
-                        if(response.body()!=null) {
-                            jsonBody = new JsonParser().
-                                    parse(response.
-                                            body().
-                                            toString()
-                                    ).
-                                    getAsJsonObject();
-                            Log.d("Response : ", jsonBody.toString());
-                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
-
-
             }
         });
 
-        // Register on click listener
+       //  Register on click listener
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -186,44 +157,16 @@ public class MainActivity extends AppCompatActivity {
                 // Get phone no from user
                 String userPhone = phone.getText().toString();
 
-                // Get register module from Grandeur Auth
-                Call<JsonObject> register = null;
                 try {
-                    register = auth.register(userEmail,userPassword,userDisplayName,userPhone);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
+                    // Create and call register module
+                    JsonObject res = auth.register(userEmail,userPassword,userDisplayName,userPhone).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
+                    token = res.get("token").getAsString();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                // Call Register module with credentials
-                register.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        JsonObject jsonBody;
-                        if(response.body()!=null) {
-                            jsonBody = new JsonParser().
-                                    parse(response.
-                                            body().
-                                            toString()
-                                    ).
-                                    getAsJsonObject();
-                            token = jsonBody.get("token").getAsString();
-                            Log.d("Response : ", jsonBody.toString());
-                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
-                                    .show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
-
             }
         });
 
@@ -235,41 +178,15 @@ public class MainActivity extends AppCompatActivity {
                 // Get code from the user
                 String userCode = code.getText().toString();
 
-                // Get register module from Grandeur Auth
-                Call<JsonObject> ConfirmReg = null;
                 try {
-                    ConfirmReg = auth.register(token,userCode);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    // Create and call register module
+                    JsonObject res = auth.register(token,userCode).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                token = null;
-
-                // Call Register module with credentials
-                ConfirmReg.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        JsonObject jsonBody;
-                        if(response.body()!=null) {
-                            jsonBody = new JsonParser().
-                                    parse(response.
-                                            body().
-                                            toString()
-                                    ).
-                                    getAsJsonObject();
-                            Log.d("Response : ", jsonBody.toString());
-                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
 
             }
         });
@@ -283,42 +200,17 @@ public class MainActivity extends AppCompatActivity {
                 // Get new password from user
                 String userPassword = password.getText().toString();
 
-                // Get change password moudle from Auth
-                Call<JsonObject> changePassword = null;
                 try {
-                    changePassword = auth.changePassword(userPassword);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    // Create and call change password module
+                    JsonObject res = auth.changePassword(userPassword).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
+                    token = res.get("code").getAsString();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                // Call change password
-                changePassword.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                        JsonObject jsonBody;
-                        if(response.body()!=null) {
-                            jsonBody = new JsonParser().
-                                    parse(response.
-                                            body().
-                                            toString()
-                                    ).
-                                    getAsJsonObject();
-                            token = jsonBody.get("token").getAsString();
-                            Log.d("Response : ", jsonBody.toString());
-                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
-                                    .show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
             }
         });
 
@@ -330,44 +222,15 @@ public class MainActivity extends AppCompatActivity {
 
                 // Get code from the user
                 String userCode = code.getText().toString();
-
-                // Get change password moudle from Auth
-                Call<JsonObject> changePassword = null;
                 try {
-                    changePassword = auth.changePassword(token,userCode);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    // Create and call change password module
+                    JsonObject res = auth.changePassword(token,userCode).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                token = null;
-
-                // Call change password
-                changePassword.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                        JsonObject jsonBody;
-                        if(response.body()!=null) {
-                            jsonBody = new JsonParser().
-                                    parse(response.
-                                            body().
-                                            toString()
-                                    ).
-                                    getAsJsonObject();
-                            Log.d("Response : ", jsonBody.toString());
-                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
-                                    .show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
             }
         });
 
@@ -379,43 +242,16 @@ public class MainActivity extends AppCompatActivity {
 
                 // Get email from user
                 String userEmail = email.getText().toString();
-
-                // Get forget password moudle from Auth
-                Call<JsonObject> forgetPassword = null;
                 try {
-                    forgetPassword = auth.forgotPassword(userEmail);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    // Create and call forget module
+                    JsonObject res = auth.forgotPassword(userEmail).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
+                    token = res.get("code").getAsString();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                // Call forget password
-                forgetPassword.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                        JsonObject jsonBody;
-                        if(response.body()!=null) {
-                            jsonBody = new JsonParser().
-                                    parse(response.
-                                            body().
-                                            toString()
-                                    ).
-                                    getAsJsonObject();
-                            token = jsonBody.get("token").getAsString();
-                            Log.d("Response : ", jsonBody.toString());
-                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
-                                    .show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
 
             }
         });
@@ -432,43 +268,15 @@ public class MainActivity extends AppCompatActivity {
                 // Get new password from user
                 String userPassword = password.getText().toString();
 
-                // Get change password module from Auth
-                Call<JsonObject> forgetPassword = null;
                 try {
-                    forgetPassword = auth.forgotPassword(token,userCode,userPassword);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    // Create and call forget password module
+                    JsonObject res = auth.forgotPassword(token,userCode,userPassword).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                token = null;
-
-                // Call change password
-                forgetPassword.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                        JsonObject jsonBody;
-                        if(response.body()!=null) {
-                            jsonBody = new JsonParser().
-                                    parse(response.
-                                            body().
-                                            toString()
-                                    ).
-                                    getAsJsonObject();
-                            Log.d("Response : ", jsonBody.toString());
-                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
-                                    .show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
             }
         });
 
@@ -477,39 +285,15 @@ public class MainActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                // Get logout module from Grandeur Auth
-                Call<JsonObject> logout = null;
                 try {
-                    logout = auth.logout();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    // Create and call logout module
+                    JsonObject res = auth.logout().get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                // Call logout module
-                logout.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        JsonObject jsonBody;
-                        if(response.body()!=null) {
-                            jsonBody = new JsonParser().
-                                    parse(response.
-                                            body().
-                                            toString()
-                                    ).
-                                    getAsJsonObject();
-                            Log.d("Response : ", jsonBody.toString());
-                            Toast.makeText(context,jsonBody.get("code").getAsString(),Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                    }
-                });
             }
         });
 
@@ -549,31 +333,17 @@ public class MainActivity extends AppCompatActivity {
                 File file = new File(absolutePath);
 
                 // Image name
-                String image = imageName.getText().toString();
-
+                String fileName = imageName.getText().toString();
                 try {
-                    storage.uploadFile(file,image).enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            JsonObject jsonBody;
-                            if(response.body()!=null) {
-                                jsonBody = new JsonParser().
-                                        parse(response.
-                                                body().
-                                                toString()
-                                        ).
-                                        getAsJsonObject();
-                                Log.d("Response : ", jsonBody.toString());
-                            }
-                        }
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                    // Create and call storage module
+                    JsonObject res = storage.uploadFile(file,fileName).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
 
-                        }
-                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
             }
         });
 
@@ -584,24 +354,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Image name
-                String image = imageName.getText().toString();
-
+                String fileName = imageName.getText().toString();
                 try {
-                    storage.getFileUrl(image).enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    // Create and call storage module
+                    JsonObject res = storage.getFileUrl(fileName).get();
+                    Toast.makeText(context,res.get("code").getAsString(),Toast.LENGTH_LONG)
+                            .show();
 
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                        }
-                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
@@ -609,6 +371,7 @@ public class MainActivity extends AppCompatActivity {
     }
     // On create ends
 
+    // Default method to fetch file URI
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -618,11 +381,11 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK)
             {
                 uri = data.getData();
-
-                Log.d("Uri", "onActivityResult: "+uri.toString());
             }
         }
     }
+
+    // Check if read storage permission is enabled
     public boolean checkPermissionForReadExternalStorage(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int result = context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -630,6 +393,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    // Request for read storage permission
     public void requestPermissionForReadExtertalStorage(Context context) throws Exception {
         try {
             ActivityCompat.requestPermissions((Activity) context,

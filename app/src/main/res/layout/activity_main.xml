@@ -155,5 +155,13 @@
         android:layout_toRightOf="@+id/uploadImage"
         android:layout_below="@+id/forgetPass"
         android:text="Fetch" />
+    <!-- Fetch image button-->
+    <Button
+        android:id="@+id/login1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/fetchImage"
+        android:layout_below="@+id/forgetPass"
+        android:text="Login1" />
 
 </RelativeLayout>

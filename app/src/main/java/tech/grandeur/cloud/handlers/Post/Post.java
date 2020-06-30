@@ -11,7 +11,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-
 import androidx.annotation.RequiresApi;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -19,6 +18,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 // Google Gson for Json
@@ -32,9 +32,6 @@ import javax.crypto.spec.SecretKeySpec;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
-// Retrofit
-import retrofit2.Call;
 
 public class Post {
 
@@ -54,10 +51,10 @@ public class Post {
     // Default function for sending requests
     // to the server.
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public Call<JsonObject> send(String path, JsonObject data, File file, Context context) throws Exception {
+    public CompletableFuture<JsonObject> send(String path, JsonObject data, File file, Context context) throws Exception {
 
         // Service
-        Call<JsonObject> service;
+        CompletableFuture<JsonObject> service;
 
         // Create full path with ApiKey
         final String fullPath = path + "?apiKey=" + this.config.get("apiKey").getAsString();

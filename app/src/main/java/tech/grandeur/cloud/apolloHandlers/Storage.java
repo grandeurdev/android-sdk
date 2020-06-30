@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 
 // Retrofit
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
 
 import retrofit2.Call;
 
@@ -38,20 +39,20 @@ public class Storage {
     // This function is used to send any
     // file along with its name to the server.
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public Call<JsonObject> uploadFile(File file, String filename) throws Exception{
+    public CompletableFuture<JsonObject> uploadFile(File file, String filename) throws Exception{
 
         // Json Object to send to the server
         JsonObject data = new JsonObject();
         data.addProperty("filename",filename);
 
         // Sends data to the server and returns a response callback
-        return this.post.send("/storage/uploadFile",data,file,this.context).clone();
+        return this.post.send("/storage/uploadFile",data,file,this.context);
     }
 
     // This function to fetch a file from the
     // server's file system
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public Call<JsonObject> getFileUrl(String filename) throws Exception {
+    public CompletableFuture<JsonObject> getFileUrl(String filename) throws Exception {
 
         // Json Object to send to the server
         JsonObject data = new JsonObject();

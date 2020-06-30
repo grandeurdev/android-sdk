@@ -15,6 +15,7 @@ public class Handlers {
 
     // Constructor
     public Handlers(Post post){
+
         this.post = post;
     }
 
