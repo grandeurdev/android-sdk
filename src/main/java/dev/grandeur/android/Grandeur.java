@@ -4,12 +4,6 @@ import dev.grandeur.android.handlers.*;
 import dev.grandeur.android.types.Config;
 import android.content.Context;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
 public class Grandeur {
 
     private Config _config = new Config();

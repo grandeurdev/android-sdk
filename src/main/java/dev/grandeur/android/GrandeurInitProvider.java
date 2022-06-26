@@ -2,7 +2,6 @@ package dev.grandeur.android;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 

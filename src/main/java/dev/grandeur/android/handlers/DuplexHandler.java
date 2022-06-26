@@ -110,6 +110,8 @@ public class DuplexHandler {
                                     e.printStackTrace();
                                 }
                                 _ws.send(packet.toString());
+                                // Scheduling ping again.
+                                _ping.postDelayed(_pingRunnable, 25000);
                             };
                             _ping.postDelayed(_pingRunnable, 25000);
 
@@ -194,14 +196,23 @@ public class DuplexHandler {
                             reconnect(auth);
                         }
 
-                        @Override
-                        public void onClosing(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
-                            super.onClosing(webSocket, code, reason);
-                        }
+//                        @Override
+//                        public void onClosing(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
+//                            super.onClosing(webSocket, code, reason);
+//                        }
 
                         @Override
                         public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
                             super.onFailure(webSocket, t, response);
+                            // Set the status to connecting
+                            setStatus("CONNECTING");
+                            // Notify user about the change
+                            if (_cConnection != null)
+                                _cConnection.call("DISCONNECTED");
+                            // Clear ping
+                            _ping.removeCallbacks(_pingRunnable);
+                            // Retry connection after a while
+                            reconnect(auth);
                         }
                     });
 
@@ -227,6 +238,7 @@ public class DuplexHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            _recon.postDelayed(_reconRunnable, 5000);
         };
         _recon.postDelayed(_reconRunnable, 5000);
     }
